@@ -1,0 +1,19 @@
+[package]
+name = "tu-planner"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+#dav-server = { version = "0.7.0", features = ["actix-compat", "memfs", "localfs"] }
+actix-web = "4.9.0"
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+clap = { version = "4.5.19", features = ["derive"] }
+figment = { version = "0.10.19", features = ["env", "json", "toml", "yaml"] }
+microxdg = "0.1.2"
+serde = { version = "1.0.210", features = ["derive"] }
+uuid = { version = "1.10.0", features = ["serde"] }
+url = { version = "2.5.2", features = ["serde"] }
+anyhow = "1.0.89"
+reqwest = "0.12.8"
+icalendar = "0.16.9"
