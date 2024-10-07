@@ -9,11 +9,23 @@ use icalendar::{Calendar, CalendarComponent, Component};
 use regex::Regex;
 use tracing::{info, Level};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
-use crate::config::{AppConfig, Config};
+use crate::config::{AppConfig, Config, Locale};
 
 const APP_NAME: &str = "tu-planner";
 
 const SPK_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new("\\WSPK\\W").unwrap());
+
+fn calendar_response(calendar: Calendar, locale: Locale) -> HttpResponse {
+    let filename = "personal.ics".to_string();
+    HttpResponse::Ok()
+        .content_type("text/calendar")
+        .insert_header(header::ContentDisposition {
+            disposition: DispositionType::Attachment,
+            parameters: vec![DispositionParam::Filename(filename)],
+        })
+        .insert_header(header::ContentLanguage(vec![QualityItem::max(locale.into())]))
+        .body(calendar.to_string())
+}
 
 async fn calendar(config: web::Data<AppConfig>) -> impl Responder {
     let tiss_link = config.tiss.link();
@@ -33,16 +45,8 @@ async fn calendar(config: web::Data<AppConfig>) -> impl Responder {
             _ => true,
         }
     });
-
-    let filename = "personal.ics".to_string();
-    HttpResponse::Ok()
-        .content_type("text/calendar")
-        .insert_header(header::ContentDisposition {
-            disposition: DispositionType::Attachment,
-            parameters: vec![DispositionParam::Filename(filename)],
-        })
-        .insert_header(header::ContentLanguage(vec![QualityItem::max(config.tiss.locale().unwrap().into())]))
-        .body(format!("{calendar}"))
+    
+    calendar_response(calendar, config.tiss.locale().unwrap())
 }
 
 #[actix_web::main]
