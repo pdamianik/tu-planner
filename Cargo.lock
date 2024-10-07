@@ -2087,6 +2087,7 @@ dependencies = [
  "figment",
  "icalendar",
  "microxdg",
+ "regex",
  "reqwest",
  "serde",
  "tracing",

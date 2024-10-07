@@ -17,3 +17,4 @@ url = { version = "2.5.2", features = ["serde"] }
 anyhow = "1.0.89"
 reqwest = "0.12.8"
 icalendar = "0.16.9"
+regex = "1.11.0"
