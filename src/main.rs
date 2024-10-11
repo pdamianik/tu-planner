@@ -12,6 +12,17 @@ use tracing_subscriber::{EnvFilter, FmtSubscriber};
 use crate::config::{AppConfig, Config, Locale};
 
 const APP_NAME: &str = "tu-planner";
+const APP_ENV_NAME: LazyLock<String> = LazyLock::new(|| {
+    APP_NAME.to_uppercase().chars().into_iter()
+        .map(|c| {
+            if c == '-' {
+                '_'
+            } else {
+                c
+            }
+        })
+        .collect()
+});
 
 const SPK_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new("\\WSPK\\W").unwrap());
 

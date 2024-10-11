@@ -129,7 +129,7 @@ pub struct Config {
 
 impl Config {
     fn get_config_potential_paths() -> anyhow::Result<Vec<PathBuf>> {
-        let dirs = XdgApp::new("tu-planner")?;
+        let dirs = XdgApp::new(crate::APP_NAME)?;
         let config_file = dirs.app_config()?;
         let sys_configs = dirs.app_sys_config()?;
         let sys_config_files = sys_configs.into_iter()
@@ -153,7 +153,7 @@ impl Config {
             }
         }
 
-        figment = figment.merge(Env::prefixed("TU_PLANNER"));
+        figment = figment.merge(Env::prefixed(&crate::APP_ENV_NAME));
 
         let config = figment.extract()?;
         Ok(config)
